@@ -8,7 +8,7 @@ interface LastfmResponse {
 
 const API_BASE_URL = 'https://ws.audioscrobbler.com/2.0/'
 const USERNAME = 'jcvandmg' 
-const LIMIT = 100
+const LIMIT = 10
 
 export const fetchTopArtists = async (): Promise<Artist[]> => {
   const apiKey = import.meta.env.VITE_LASTFM_API_KEY

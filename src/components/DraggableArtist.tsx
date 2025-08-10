@@ -1,8 +1,8 @@
 import { useDraggable } from '@dnd-kit/core'
-import { type InteractionArtist } from '../utils/artistData'
+import { type unrankedArtist } from '../utils/artistData'
 
 interface DraggableArtistProps {
-  artist: InteractionArtist
+  artist: unrankedArtist
 }
 
 export function DraggableArtist({ artist }: DraggableArtistProps) {

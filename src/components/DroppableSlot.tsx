@@ -1,12 +1,14 @@
 import { useDroppable } from '@dnd-kit/core'
-import { type InteractionArtist } from '../utils/artistData'
+import { type unrankedArtist } from '../utils/artistData'
 
 interface DroppableSlotProps {
   position: number
-  artist: InteractionArtist | null
+  artist: unrankedArtist | null
+  isExactMatch?: boolean
+  isWrongMatch?: boolean
 }
 
-export function DroppableSlot({ position, artist }: DroppableSlotProps) {
+export function DroppableSlot({ position, artist, isExactMatch = false, isWrongMatch = false }: DroppableSlotProps) {
   const { isOver, setNodeRef } = useDroppable({
     id: `slot-${position}`,
   })
@@ -14,7 +16,7 @@ export function DroppableSlot({ position, artist }: DroppableSlotProps) {
   return (
     <div
       ref={setNodeRef}
-      className={`ranking-slot ${isOver ? 'drag-over' : ''} ${artist ? 'filled' : ''}`}
+      className={`ranking-slot ${isOver ? 'drag-over' : ''} ${artist ? 'filled' : ''} ${isExactMatch ? 'exact-match' : ''} ${isWrongMatch ? 'wrong-match' : ''}`}
     >
       <span className="slot-number">{position}.</span>
       <span className="slot-content">

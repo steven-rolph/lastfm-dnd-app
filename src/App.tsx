@@ -7,9 +7,9 @@ import {
 import './App.css'
 import topArtistsData from './data/dummy.json'
 import {
-  type LastFmArtist,
-  type InteractionArtist,
-  type AppPhase,
+  type Artist,
+  type unrankedArtist,
+  type Phase,
   prepareArtists,
   getOriginalRanking
 } from './utils/artistData'
@@ -21,11 +21,11 @@ const parseSlotId = (id: string): number | null => {
 }
 
 function App() {
-  const [phase, setPhase] = useState<AppPhase>('initial')
-  const [placedArtists, setPlacedArtists] = useState<Map<number, InteractionArtist>>(new Map())
+  const [phase, setPhase] = useState<Phase>('initial')
+  const [placedArtists, setPlacedArtists] = useState<Map<number, unrankedArtist>>(new Map())
   
-  const artists: LastFmArtist[] = topArtistsData.topartists.artist
-  const interactionArtists = prepareArtists(artists, 10)
+  const artists: Artist[] = topArtistsData.topartists.artist
+  const [interactionArtists] = useState(() => prepareArtists(artists, 10)) // Generate once, stable IDs
   const originalRanking = getOriginalRanking(artists, 10)
   
   const availableArtists = useMemo(() => {
@@ -63,6 +63,11 @@ function App() {
     }
   }
 
+  const isExactMatch = (userPosition: number, artistName: string): boolean => {
+    const lastfmArtist = originalRanking.find(artist => artist.name === artistName)
+    return lastfmArtist?.rank === userPosition
+  }
+
   return (
     <div className="app">
       <div className="header">
@@ -75,7 +80,7 @@ function App() {
       >
         <div className="main-content">
           <div className="left-column">
-            <h2>Artists</h2>
+            <h2>{phase === 'reveal' || phase === 'comparison' ? "Steven's Last.fm Reality" : 'Artists'}</h2>
             <div className="artists-list">
               {phase === 'initial' || phase === 'interaction' ? (
 
@@ -96,16 +101,22 @@ function App() {
           </div>
           
           <div className="right-column">
-            <h2>Ranking</h2>
+            <h2>{phase === 'reveal' || phase === 'comparison' ? 'Your Prediction' : 'Your Ranking'}</h2>
             <div className="ranking-slots">
               {Array.from({ length: 10 }, (_, index) => {
                 const position = index + 1
                 const artist = placedArtists.get(position) || null
+                const isMatch = artist ? isExactMatch(position, artist.name) : false
+                const isWrong = artist ? !isMatch : false // Artist is placed but in wrong position
+                const showComparison = phase === 'reveal' || phase === 'comparison'
+                
                 return (
                   <DroppableSlot
                     key={position}
                     position={position}
                     artist={artist}
+                    isExactMatch={showComparison ? isMatch : false}
+                    isWrongMatch={showComparison ? isWrong : false}
                   />
                 )
               })}
@@ -113,6 +124,7 @@ function App() {
             
             {placedArtists.size === 10 && phase === 'interaction' && (
               <button
+                className="reveal-button"
                 onClick={() => setPhase('reveal')}
               >
                 Reveal Last.fm Ranking!

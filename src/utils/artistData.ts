@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import { shuffle } from 'lodash'
 
-export interface LastFmArtist {
+export interface Artist {
   name: string;
   playcount: string;
   '@attr': {
@@ -9,40 +9,40 @@ export interface LastFmArtist {
   };
 }
 
-export interface InteractionArtist {
+export interface unrankedArtist {
   id: string;
   name: string;
 }
 
-export interface RevealArtist {
+export interface rankedArtist {
   id: string;
   name: string;
   rank: number;
   playcount: string;
 }
 
-export type AppPhase = 'initial' | 'interaction' | 'reveal' | 'comparison';
+export type Phase = 'initial' | 'interaction' | 'reveal' | 'comparison';
 
 const generateId = (): string => uuidv4()
 
 export const prepareArtists = (
-  artists: LastFmArtist[],
+  artists: Artist[],
   count: number = 10
-): InteractionArtist[] => {
+): unrankedArtist[] => {
   const topArtists = artists.slice(0, count);
   
-  const interactionArtists: InteractionArtist[] = topArtists.map(artist => ({
+  const rankedArtists: unrankedArtist[] = topArtists.map(artist => ({
     id: generateId(),
     name: artist.name,
   }));
 
-  return shuffle(interactionArtists);
+  return shuffle(rankedArtists);
 };
 
 export const getOriginalRanking = (
-  artists: LastFmArtist[],
+  artists: Artist[],
   count: number = 10
-): RevealArtist[] => {
+): rankedArtist[] => {
   return artists.slice(0, count).map(artist => ({
     id: generateId(),
     name: artist.name,
@@ -51,7 +51,7 @@ export const getOriginalRanking = (
   }));
 };
 
-export const createRankingMap = (artists: LastFmArtist[]): Map<string, number> => {
+export const createRankingMap = (artists: Artist[]): Map<string, number> => {
   const rankMap = new Map<string, number>();
   
   artists.forEach(artist => {

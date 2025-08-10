@@ -11,13 +11,7 @@
 
 .header h1 {
   margin-bottom: 1rem;
-  color: #b20005;
-}
-
-.header p {
-  font-size: 1.1rem;
-  color: #666;
-  margin: 0;
+  color: #000;
 }
 
 .main-content {
@@ -75,23 +69,47 @@
   font-size: 0.9rem;
 }
 
-.drop-area {
-  background: #f0f0f0;
-  border: 2px dashed #ccc;
-  border-radius: 12px;
-  padding: 3rem 2rem;
-  text-align: center;
-  min-height: 200px;
+.ranking-slots {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
-.drop-area p {
-  color: #999;
-  font-size: 1.1rem;
-  margin: 0;
+.ranking-slot {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background: #f8f8f8;
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  min-height: 60px;
+  transition: all 0.2s;
 }
+
+.ranking-slot.drag-over {
+  background: #e3f2fd;
+  border-color: #2196f3;
+}
+
+.slot-number {
+  font-weight: bold;
+  color: #666;
+  margin-right: 1rem;
+  min-width: 25px;
+}
+
+.slot-content {
+  font-weight: 500;
+  color: #333;
+  flex-grow: 1;
+}
+
+.ranking-slot.filled {
+  background: #f0f7ff;
+  border-style: solid;
+  border-color: #b3d9ff;
+}
+
 
 @media (max-width: 768px) {
   .main-content {

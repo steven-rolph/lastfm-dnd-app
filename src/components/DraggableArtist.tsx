@@ -1,8 +1,8 @@
 import { useDraggable } from '@dnd-kit/core'
-import { type unrankedArtist } from '../utils/artistData'
+import { type UnrankedArtist } from '../utils/artistData'
 
 interface DraggableArtistProps {
-  artist: unrankedArtist
+  artist: UnrankedArtist
 }
 
 export function DraggableArtist({ artist }: DraggableArtistProps) {
@@ -13,6 +13,7 @@ export function DraggableArtist({ artist }: DraggableArtistProps) {
   const style = {
     transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
     opacity: isDragging ? 0.5 : 1,
+    cursor: isDragging ? 'grabbing' : 'grab',
   }
 
   return (

@@ -9,12 +9,12 @@ export interface Artist {
   };
 }
 
-export interface unrankedArtist {
+export interface UnrankedArtist {
   id: string;
   name: string;
 }
 
-export interface rankedArtist {
+export interface RankedArtist {
   id: string;
   name: string;
   rank: number;
@@ -28,35 +28,26 @@ const generateId = (): string => uuidv4()
 export const prepareArtists = (
   artists: Artist[],
   count: number = 10
-): unrankedArtist[] => {
+): UnrankedArtist[] => {
   const topArtists = artists.slice(0, count);
   
-  const rankedArtists: unrankedArtist[] = topArtists.map(artist => ({
+  const interactionArtists: UnrankedArtist[] = topArtists.map(artist => ({
     id: generateId(),
     name: artist.name,
   }));
 
-  return shuffle(rankedArtists);
+  return shuffle(interactionArtists);
 };
 
 export const getOriginalRanking = (
   artists: Artist[],
   count: number = 10
-): rankedArtist[] => {
+): RankedArtist[] => {
   return artists.slice(0, count).map(artist => ({
-    id: generateId(),
+    id: `original-${artist.name.replace(/\s+/g, '-').toLowerCase()}`,
     name: artist.name,
     rank: parseInt(artist['@attr'].rank),
     playcount: artist.playcount,
   }));
 };
 
-export const createRankingMap = (artists: Artist[]): Map<string, number> => {
-  const rankMap = new Map<string, number>();
-  
-  artists.forEach(artist => {
-    rankMap.set(artist.name, parseInt(artist['@attr'].rank));
-  });
-  
-  return rankMap;
-};

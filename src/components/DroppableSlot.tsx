@@ -1,9 +1,9 @@
 import { useDroppable } from '@dnd-kit/core'
-import { type unrankedArtist } from '../utils/artistData'
+import { type UnrankedArtist } from '../utils/artistData'
 
 interface DroppableSlotProps {
   position: number
-  artist: unrankedArtist | null
+  artist: UnrankedArtist | null
   isExactMatch?: boolean
   isWrongMatch?: boolean
 }

@@ -1,34 +1,47 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import topArtistsData from './data/dummy.json'
+
+interface Artist {
+  name: string;
+  playcount: string;
+  '@attr': {
+    rank: string;
+  };
+}
 
 function App() {
-  const [count, setCount] = useState(0)
+  const artists: Artist[] = topArtistsData.topartists.artist;
+  const top10Artists = artists.slice(0, 10);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="app">
+      <div className="header">
+        <h1>Last.fm DnD App - Steven Rolph</h1>
+        <p>Explore the top artists on Last.fm through a Drag and Drop lens.</p>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      
+      <div className="main-content">
+        <div className="left-column">
+          <h2>Last.fm Top Artists</h2>
+          <div className="artists-list">
+            {top10Artists.map((artist) => (
+              <div key={artist['@attr'].rank} className="artist-item">
+                <span className="rank">#{artist['@attr'].rank}</span>
+                <span className="name">{artist.name}</span>
+                <span className="playcount">{artist.playcount} plays</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        <div className="right-column">
+          <h2>Drop Zone</h2>
+          <div className="drop-area">
+            <p>Drag artists here...</p>
+          </div>
+        </div>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   )
 }
 
